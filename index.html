@@ -1,0 +1,98 @@
+<html>
+<head>
+  <title>Super Handy Number Generator</title>
+  <script language="javascript">
+
+function elt(id) {
+  return document.getElementById(id)
+}
+
+function luhn(str) {
+  var ii;
+  var double = false;
+  var sum = 0;
+  for (ii = str.length - 1; ii >= 0; ii--) {
+    var digit = parseInt(str[ii]);
+    if (double) {
+      var doubled = digit * 2;
+      sum += (doubled > 9 ? doubled - 9 : doubled);
+    } else {
+      sum += digit;
+    }
+
+    double = !double;
+  }
+
+  return (sum % 10) == 0;
+}
+
+function group4(str) {
+  var output = "";
+  for (var ii = 0; ii < str.length; ii++) {
+    output += str[ii];
+    if (ii % 4 == 3) {
+      output += " ";
+    }
+  }
+  return output;
+}
+
+function generate() {
+  var first = elt("first6").value;
+  var last = elt("last4").value;
+
+  var genLength = parseInt(elt("length").value) - first.length - last.length;
+
+  var ii;
+  var middle = "";
+
+  for (ii = 0; ii < genLength - 1; ii++) {
+    middle += Math.floor(Math.random() * 10);
+  }
+
+  var digit;
+  for (digit = 0; !luhn(first + middle + digit + last); digit++) {
+    // woop
+  }
+
+  elt("generated").innerText = group4(first + middle + digit + last);
+}
+
+  </script>
+</head>
+<body>
+
+<h1>Super Handy Number Generator</h1>
+
+<p>Some super handy first 6 digit examples:</p>
+
+<ul>
+  <li>Visa debit: 465922, 476230</li>
+  <li>Mastercard debit: 535560</li>
+</ul>
+
+<table border="0">
+<tr>
+  <td>Desired first six digits</td>
+  <td><input id="first6" type="number" maxlength="6" /></td>
+</tr>
+<tr>
+  <td>Desired last four digits</td>
+  <td><input id="last4" type="number" maxlength="4" /></td>
+</tr>
+<tr>
+  <td>Total length</td>
+  <td><input id="length" type="number" value="16" /></td>
+</tr>
+<tr>
+  <td></td>
+  <td><input type="button" value="Generate" onclick="javascript:generate()" /></td>
+</tr>
+<tr>
+  <td></td>
+  <td><span id="generated" /></td>
+</tr>
+</table>
+
+</body>
+</html>
